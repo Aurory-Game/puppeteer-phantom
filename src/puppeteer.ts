@@ -114,10 +114,6 @@ export async function switchToMainWindow() {
  * @ignore
  */
 export async function switchToPhantomNotification() {
-  // todo: wait for page to be initialized before triggering waitFor
-  // todo: wait for spinning loader to be gone before triggering waitFor
-  // todo: get rid of waitForTimeout after fixing above
-  // todo: all of the above are issues related to phantom notification of tx confirmation
   await getPhantomWindow().waitForTimeout(3000)
   const pages = await getBrowser().pages()
   const extensionId = await getExtensionId()
