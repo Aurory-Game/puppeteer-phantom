@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  solana_verion: 1.8.5
+  anchor_version: 0.19.0
+  node_version: 14.17.1
+
+jobs:
+  setup-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup-essentials/
+      - uses: ./.github/actions/setup-solana/
+      - uses: ./.github/actions/setup-anchor/
+      - uses: ./.github/actions/setup-node/
+      - name: Test
+        run: xvfb-run npm run test
+        env:
+          MNEMONIC: ${{ secrets.MNEMONIC }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+      - name: Archive recorded test progress
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: recorded-test-progress
+          path: example/data

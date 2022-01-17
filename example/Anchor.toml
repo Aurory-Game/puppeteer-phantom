@@ -1,0 +1,12 @@
+[programs.localnet]
+example = "yfetrhfXx3VBdhx31PkxySB54xX53LXt9S3NrD44pAf"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "../node_modules/.bin/env-cmd --silent ../node_modules/.bin/ts-mocha --bail --timeout 0 tests"

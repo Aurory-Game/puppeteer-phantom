@@ -1,0 +1,37 @@
+name: 'Setup Anchor & Program'
+description: 'Setup cargo related packages'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/cache@v2
+      name: Cache Cargo registry + index
+      id: cache-cargo
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+        key: cargo-${{ runner.os }}-v0000-${{ hashFiles('**/Cargo.lock') }}
+
+    - uses: actions/cache@v2
+      name: Cache target folder
+      id: cache-programs
+      with:
+        path: |
+          ./example/target
+        key: solana-${{ runner.os }}-v0000-${{ hashFiles('**/programs/**/*.rs') }}-${{ hashFiles('**/programs/**/*.toml') }}
+
+    - name: Install Anchor
+      if: steps.cache-cargo.outputs.cache-hit != 'true'
+      run: |
+        export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
+        cargo install --git https://github.com/project-serum/anchor --tag v${{ env.anchor_version }} anchor-cli --locked
+      shell: bash
+
+    - name: Build program
+      run: |
+        export PATH="/home/runner/.local/share/solana/install/active_release/bin:$PATH"
+        anchor build
+      working-directory: example
+      shell: bash
