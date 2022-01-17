@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "typeRoots": ["node_modules/@types", "types"]
+    "typeRoots": ["types"]
   },
   "include": ["src"],
   "exclude": ["node_modules"],
