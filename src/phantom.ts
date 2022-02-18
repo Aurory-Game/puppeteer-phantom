@@ -43,10 +43,8 @@ export async function setup({
 export async function acceptAccess() {
   const page = await puppeteer.switchToPhantomNotification()
   const doc = await page!.getDocument()
-  const button = await doc.findByText('Connect', { selector: 'button' })
-  await sleep(2000)
+  const button = await doc.findByText('Connect', { selector: 'button' }, { timeout: 10_000 })
   button.click()
-  await sleep(3000)
   return true
 }
 
@@ -58,22 +56,22 @@ async function importWallet(mnemonic: string, password: string) {
   const doc = await page.getDocument()
 
   // wait for welcome text, and click "recover wallet"
-  await doc.findByText('A crypto wallet reimagined for DeFi & NFTs', {}, { timeout: 10000 })
+  await doc.findByText('A crypto wallet reimagined for DeFi & NFTs', {}, { timeout: 10_000 })
   ;(await doc.findByText('Use Secret Recovery Phrase')).click()
 
   // click "recover wallet"
-  await doc.findByText('Secret Recovery Phrase', {}, { timeout: 10000 })
+  await doc.findByText('Secret Recovery Phrase', {}, { timeout: 10_000 })
   // (await doc.findByPlaceholderText('Secret phrase')).type(mnemonic);
   await page.focus('textarea')
   await page.keyboard.type(mnemonic)
   ;(await doc.findByText('Import secret recovery phrase')).click()
 
   // click import selected accounts
-  await doc.findByText('Import Accounts', {}, { timeout: 10000 })
+  await doc.findByText('Import Accounts', {}, { timeout: 10_000 })
   ;(await doc.findByText('Import Selected Accounts')).click()
 
   // set password
-  await doc.findByText('Create a password', {}, { timeout: 10000 })
+  await doc.findByText('Create a password', {}, { timeout: 10_000 })
   // (await doc.findByPlaceholderText('Password')).type(password);
   await page.focus('input[name="password.first"]')
   await page.keyboard.type(password)
@@ -86,11 +84,11 @@ async function importWallet(mnemonic: string, password: string) {
   ;(await doc.findByText('Save')).click()
 
   // dismiss keyboard shortcut tip
-  await doc.findByText('Keyboard shortcut', {}, { timeout: 10000 })
+  await doc.findByText('Keyboard shortcut', {}, { timeout: 10_000 })
   ;(await doc.findByText('Continue')).click()
 
   // finish
-  await doc.findByText(`You're all done!`, {}, { timeout: 10000 })
+  await doc.findByText(`You're all done!`, {}, { timeout: 10_000 })
   ;(await doc.findByText('Finish')).click()
 }
 
@@ -117,10 +115,10 @@ async function changeNetwork(networkName?: Network) {
   const settings = await tablist.$('a:last-child')
   settings!.click()
 
-  const changeNetwork = await doc.findByText('Change Network', {}, { timeout: 10000 })
+  const changeNetwork = await doc.findByText('Change Network', {}, { timeout: 10_000 })
   changeNetwork.click()
 
-  const network = await doc.findByText(networkName, {}, { timeout: 10000 })
+  const network = await doc.findByText(networkName, {}, { timeout: 10_000 })
   network.click()
 
   await puppeteer.teardownPhantomWindow()
@@ -132,8 +130,7 @@ async function changeNetwork(networkName?: Network) {
 export async function approveTx() {
   const page = await puppeteer.switchToPhantomNotification()
   const doc = await page!.getDocument()
-  const button = await doc.findByText('Approve')
+  const button = await doc.findByText('Approve', {}, { timeout: 10_000 })
   button.click()
-  await puppeteer.getPhantomWindow().waitForTimeout(3000)
   return true
 }

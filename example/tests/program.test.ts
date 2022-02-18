@@ -46,8 +46,7 @@ describe('example', () => {
     const connected = await phantom.acceptAccess()
     assert.ok(connected)
 
-    const label = await doc!.findByTestId('address-label')
-    await label.getByText(user.toString())
+    await doc!.findByText(user.toString(), {}, { timeout: 10_000 })
   })
 
   it('requests SOL', async () => {
